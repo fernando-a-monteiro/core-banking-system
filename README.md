@@ -16,8 +16,13 @@ A Fase 4: API RESTful e Nuvem marca a transição para um ambiente moderno de ap
 
 💻 Stack Tecnológica
 Linguagem: Java (JDK 21)
+
 Paradigma Atual: Imperativo (em evolução para Orientação a Objetos)
+
 Controle de Versão: Git & GitHub
+
 ⚙️ Como Executar a Fase 1
+
 javac BancoSimples.java
+
 java BancoSimples
