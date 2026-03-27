@@ -1,28 +1,109 @@
-🏦 Sistema Bancário Central (Core Banking)
+# 🏦 Core Banking System
 
-Este projeto documenta a evolução prática de um motor de processamento de transações bancárias, simulando operações críticas de um core financeiro. O objetivo é demonstrar o ciclo completo de desenvolvimento e refatoração de software, evoluindo de um modelo procedural para uma arquitetura limpa, escalável e orientada a sistemas reais de alta confiabilidade, com foco em consistência de dados e integridade de operações.
+> Motor de processamento de transações bancárias em desenvolvimento iterativo, evoluindo de um modelo procedural para uma arquitetura limpa e escalável.
 
-🎯 Roadmap de Refatoração e Evolução
+---
 
-O desenvolvimento está estruturado em fases progressivas de maturidade em engenharia de software, evidenciando a evolução arquitetural do sistema ao longo do tempo.
+## 📌 Sobre o Projeto
 
-A Fase 1: O Marco Zero (Script Procedural) representa o estágio atual do projeto. Nela, a implementação é realizada em um único arquivo (BancoSimples.java), utilizando estruturas de controle de fluxo, loops e entrada/saída via console. Este estágio evidencia limitações importantes, como o forte acoplamento entre regras de negócio e interface, ausência de encapsulamento e falta de modelagem de estado. Esses problemas são intencionalmente mantidos para demonstrar, na prática, a necessidade de evolução arquitetural.
+Este repositório documenta **minha evolução como desenvolvedor Java**, mostrando na prática como um sistema bancário cresce em maturidade arquitetural a cada fase.
 
-A Fase 2: Refatoração para Orientação a Objetos (POO) introduz a separação de responsabilidades com base nos princípios SOLID, especialmente o Single Responsibility Principle (SRP). Nesta etapa, serão criadas entidades de domínio como Conta e Cliente, promovendo encapsulamento das regras de negócio e isolamento completo entre a lógica de domínio e a interface de usuário.
+O objetivo não é apenas fazer o código funcionar — é fazê-lo da forma certa, aplicando os mesmos princípios usados por empresas como **Itaú, B3 e Nubank**.
 
-Na Fase 3: Persistência e Padrões de Projeto, o sistema passa a integrar um banco de dados relacional (MySQL), utilizando padrões como Repository/DAO para abstração de acesso a dados. Também são introduzidos conceitos fundamentais de sistemas financeiros, como o uso de transações para garantir propriedades ACID, além da preparação para cenários de concorrência e consistência de dados.
+---
 
-A Fase 4: API RESTful e Nuvem marca a transição para um ambiente moderno de aplicações distribuídas. O sistema será migrado para o ecossistema Spring Boot, com exposição de endpoints REST e estrutura preparada para deploy em nuvem. Além disso, serão considerados aspectos essenciais de sistemas em produção, como observabilidade, logging estruturado e boas práticas de segurança. A evolução futura também contempla conceitos como idempotência e controle de concorrência, aproximando o projeto de cenários reais de sistemas financeiros distribuídos.
+## 🗺️ Roadmap de Fases
 
-💻 Stack Tecnológica
-Linguagem: Java (JDK 21)
+| Fase | Branch | Status | Descrição |
+|------|--------|--------|-----------|
+| Fase 1 | `main` | ✅ Concluída | Script procedural — monolito funcional |
+| Fase 2 | `fase-2` | ✅ Concluída | Orientação a Objetos — encapsulamento e SRP |
+| Fase 3 | `fase-3` | 🔜 Em breve | Persistência com banco de dados MySQL |
+| Fase 4 | `fase-4` | 🔜 Em breve | API REST com Spring Boot |
 
-Paradigma Atual: Imperativo (em evolução para Orientação a Objetos)
+---
 
-Controle de Versão: Git & GitHub
+## 🚀 Fase 2 — Orientação a Objetos (Branch Atual)
 
-⚙️ Como Executar a Fase 1
+### O que mudou em relação à Fase 1?
 
-javac BancoSimples.java
+Na Fase 1, o código era um **monolito procedural**: `nome`, `cpf` e `saldo` eram variáveis soltas dentro do `main`, e toda a lógica bancária estava misturada em um único arquivo.
 
-java BancoSimples
+Na Fase 2, o sistema foi **refatorado para arquitetura em camadas**, aplicando três princípios fundamentais:
+
+---
+
+### 🏗️ Arquitetura Aplicada
+```
+src/
+├── BancoSimples.java          → Orquestrador (main)
+└── domain/
+    └── model/
+        ├── Cliente.java       → Entidade de domínio
+        └── Conta.java         → Entidade de domínio
+```
+
+---
+
+### 🔒 Princípio 1 — Encapsulamento
+
+`Cliente` e `Conta` possuem todos os atributos `private`. Nenhum código externo acessa ou altera `cpf`, `nome` ou `saldo` diretamente.
+```java
+// ❌ Fase 1 — dado solto, sem proteção
+double saldo = 1500;
+saldo -= valorSaque;
+
+// ✅ Fase 2 — dado protegido dentro do objeto
+private double saldo;
+conta.sacar(valorSaque);
+```
+
+---
+
+### 🧠 Princípio 2 — Domínio Rico
+
+A classe `Conta` é um **objeto inteligente**: ela conhece suas próprias regras de negócio e as aplica sozinha.
+```java
+public boolean sacar(double valor) {
+    if (valor <= 0)      return false;
+    if (valor > saldo)   return false;
+    saldo -= valor;
+    return true;
+}
+```
+
+---
+
+### 🎯 Princípio 3 — SRP (Single Responsibility Principle)
+
+Cada classe tem **uma única responsabilidade**:
+
+- `Cliente` → guarda dados cadastrais
+- `Conta` → executa operações financeiras
+- `BancoSimples` → lê entradas e exibe resultados
+
+---
+
+## 🛠️ Como Executar
+
+**Pré-requisitos:** Java 11+
+```bash
+# Clone o repositório
+git clone https://github.com/fernando-a-monteiro/core-banking-system.git
+
+# Entre na pasta
+cd core-banking-system
+
+# Compile
+javac -d out src/domain/model/Cliente.java src/domain/model/Conta.java src/BancoSimples.java
+
+# Execute
+java -cp out BancoSimples
+```
+
+---
+
+## 👨‍💻 Autor
+
+**Fernando Monteiro**  
+[![GitHub](https://img.shields.io/badge/GitHub-fernando--a--monteiro-black?logo=github)](https://github.com/fernando-a-monteiro)
