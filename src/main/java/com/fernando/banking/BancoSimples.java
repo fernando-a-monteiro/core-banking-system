@@ -1,3 +1,4 @@
+package com.fernando.banking
 import java.util.Scanner;
 
 public class BancoSimples {
